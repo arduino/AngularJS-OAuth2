@@ -85,6 +85,12 @@
 					if (service.token) {
 						parsedFromHash = true;
 					}
+				} else if(window.location.hash) {
+					var values = window.location.hash.split('#')[1];
+					service.token = setTokenFromHashParams(values);
+					if (service.token) {
+						parsedFromHash = true;
+					}
 				}
 			} else {
 				// Try and get the token from the hash params on the URL
@@ -120,6 +126,7 @@
 					if (typeof(oauthRedirectRoute) !== 'undefined' && oauthRedirectRoute != "null") {
 						$window.sessionStorage.setItem('oauthRedirectRoute', null);
 						$location.path(oauthRedirectRoute);
+						$location.url($location.path());
 					}
 				}
 				else {
