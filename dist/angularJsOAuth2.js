@@ -79,19 +79,19 @@
 				service.token = setTokenFromHashParams(trustedTokenHash);
 			}
 			else if ($location.$$html5) {
-				if ($location.path().length > 1) {
-					var values = $location.path().substring(1);
-					service.token = setTokenFromHashParams(values);
-					if (service.token) {
-						parsedFromHash = true;
-					}
-				} else if(window.location.hash) {
+				if(window.location.hash) {
 					var values = window.location.hash.split('#')[1];
 					service.token = setTokenFromHashParams(values);
 					if (service.token) {
 						parsedFromHash = true;
 					}
-				}
+				} else if ($location.path().length > 1) {
+					var values = $location.path().substring(1);
+					service.token = setTokenFromHashParams(values);
+					if (service.token) {
+						parsedFromHash = true;
+					}
+				} 
 			} else {
 				// Try and get the token from the hash params on the URL
 				var hashValues = window.location.hash;
