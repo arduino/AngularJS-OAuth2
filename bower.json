@@ -1,9 +1,10 @@
 {
-  "name": "AngularJS-OAuth2",
-  "version": "1.2.3",
-  "homepage": "https://github.com/JamesRandall/AngularJS-OAuth2",
+  "name": "Arduino-AngularJS-OAuth2",
+  "version": "1.2.4",
+  "homepage": "https://github.com/arduino/AngularJS-OAuth2",
   "authors": [
-    "James Randall"
+    "James Randall",
+    "Stefania Mellai"
   ],
   "description": "Adds OAuth 2 authentication support to AngularJS",
   "keywords": [
