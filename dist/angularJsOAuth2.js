@@ -79,19 +79,19 @@
 				service.token = setTokenFromHashParams(trustedTokenHash);
 			}
 			else if ($location.$$html5) {
-				if(window.location.hash) {
-					var values = window.location.hash.split('#')[1];
-					service.token = setTokenFromHashParams(values);
-					if (service.token) {
-						parsedFromHash = true;
-					}
-				} else if ($location.path().length > 1) {
+				if ($location.path().length > 1) {
 					var values = $location.path().substring(1);
 					service.token = setTokenFromHashParams(values);
 					if (service.token) {
 						parsedFromHash = true;
 					}
-				} 
+				} else if(window.location.hash) {
+					var values = window.location.hash.split('#')[1];
+					service.token = setTokenFromHashParams(values);
+					if (service.token) {
+						parsedFromHash = true;
+					}
+				}
 			} else {
 				// Try and get the token from the hash params on the URL
 				var hashValues = window.location.hash;
@@ -268,7 +268,9 @@
 			window.setTimeout(setupTokenSilentRenewInTheFuture, renewTokenIn);
 		};
 
-		service.signOut = function(token) {
+		service.signOut = function() {
+			var token = accessToken.get().id_token;
+			accessToken.destroy();
 			if (service.signOutUrl && service.signOutUrl.length > 0) {
 				var url = service.signOutUrl;
 				if (service.appendSignoutToken) {
@@ -276,7 +278,7 @@
 				}
 				if (service.signOutRedirectUrl && service.signOutRedirectUrl.length > 0) {
 					url = url + (service.appendSignoutToken ? '&' : '?');
-					url = url + 'post_logout_redirect_uri=' + encodeURIComponent(service.signOutRedirectUrl);
+					url = url + 'redirect_uri=' + encodeURIComponent(service.signOutRedirectUrl);
 				}
 				window.location.replace(url);
 			}
@@ -292,13 +294,13 @@
 			  params.nonce = generateState();
 			}
 			service.nonce = params.nonce;
-			service.clientId= params.clientId;
-			service.redirectUrl= params.redirectUrl;
-			service.scope= params.scope;
-			service.responseType= params.responseType;
-			service.authorizationUrl= params.authorizationUrl;
+			service.clientId = params.clientId;
+			service.redirectUrl = params.redirectUrl;
+			service.scope = params.scope;
+			service.responseType = params.responseType;
+			service.authorizationUrl = params.authorizationUrl;
 			service.signOutUrl = params.signOutUrl;
-			service.silentTokenRedirectUrl= params.silentTokenRedirectUrl;
+			service.silentTokenRedirectUrl = params.silentTokenRedirectUrl;
 			service.signOutRedirectUrl = params.signOutRedirectUrl;
 			service.state = params.state || generateState();
 			if (params.signOutAppendToken == 'true') {
@@ -371,7 +373,7 @@
                 if (scope.tokenStorageHandler) {
                     tokenStorage = scope.tokenStorageHandler
                 }
-				scope.buttonClass = scope.buttonClass || 'btn btn-primary';
+				scope.buttonClass = scope.buttonClass; //|| 'btn btn-primary';
 				scope.signInText = scope.signInText || 'Sign In';
 				scope.signOutText = scope.signOutText || 'Sign Out';
 				scope.responseType = scope.responseType || 'token';
@@ -433,9 +435,7 @@
 			}
 
 			scope.signOut = function() {
-				var token = accessToken.get().id_token;
-				accessToken.destroy();
-				endpoint.signOut(token);
+				endpoint.signOut();
 			};
 		};
 
